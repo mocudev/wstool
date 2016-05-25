@@ -100,13 +100,15 @@ else:
     cmdclass = {}
 
 
-install_requires = ['vcstools>=0.1.38', 'pyyaml']
+install_requires = ['mocu_vcstools==0.1.38', 'pyyaml']
 try:
     from collections import OrderedDict
 except ImportError:
     install_requires.append('ordereddict')  # for python<=2.6
 
-
+scripts = ["scripts/wstool"]
+if sys.platform == 'win32':
+    scripts = ["scripts/wstool.bat", "scripts/wstool_win"]
 setup(name='wstool',
       version=get_version(),
       packages=['wstool'],
@@ -115,7 +117,10 @@ setup(name='wstool',
       cmdclass=cmdclass,
       # rosinstall dependency to be kept in order not to break ros hydro install instructions
       install_requires=install_requires,
-      scripts=["scripts/wstool"],
+      dependency_links=[
+          'git+ssh://git@github.com/mocudev/vcstools.git@mocu_vcstools#egg=mocu_vcstools-0.1.38',
+      ],
+      scripts=scripts,
       author="Tully Foote",
       author_email="tfoote@osrfoundation.org",
       url="http://wiki.ros.org/wstool",
